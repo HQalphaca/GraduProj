@@ -6,6 +6,8 @@ using UnityEngine;
 public class UnitDB
 {
     public string name;
+    public Sprite sprite;
+    public float AttackRange;
     public int AttackDamage;
     public float AttackSpeed;
     public int CriticalDamage;

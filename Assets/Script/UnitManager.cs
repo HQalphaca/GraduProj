@@ -7,7 +7,15 @@ public class UnitManager : MonoBehaviour
     public static UnitManager Inst { get; private set; }
     private void Awake() => Inst = this;
 
+    List<GameObject> Spawned = new List<GameObject>();
+
     [SerializeField] UnitDatabase UDB;
+    [SerializeField] GameObject UnitPrefab;
+
+    [Range(0, 16)]
+    public int x;
+    [Range(0, 16)]
+    public int y;
 
     List<UnitDB> statBuffer;
     public UnitDB SummonUnit()
@@ -46,6 +54,22 @@ public class UnitManager : MonoBehaviour
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Space))
-            Debug.Log(SummonUnit().name);
+        {
+            AddUnit(true);
+        }
     }
+
+    
+
+    void AddUnit(bool isMine)
+    {
+        int RXL = Random.Range(-2, 3);
+        int RYL = Random.Range(-1, 2);
+        var unitObject = Instantiate(UnitPrefab, new Vector3(RXL,RYL,0f), Quaternion.identity);
+        var unit = unitObject.GetComponent<Unit>();
+        unit.SetUp(SummonUnit());
+        Spawned.Add(unitObject);
+    }
+
+    
 }

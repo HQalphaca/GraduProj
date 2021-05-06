@@ -13,14 +13,9 @@ public class Enemy : MonoBehaviour
     public Sprite[] sprites;
     public bool isMove = true;
     private float speed = 1f;
-    public enum State
-    {
-        Move = 0,
-        Attack = 1,
-        Hit = 2,
-        Die = 3
-    }
-    private State state = State.Move;
+    public UnitDB unitdb;
+
+
     private void Awake()
     {
         anim = GetComponent<Animator>();
@@ -36,6 +31,7 @@ public class Enemy : MonoBehaviour
             Move();
         }
     }
+
 
     public void OnHit(int dmg)
     {
@@ -63,12 +59,12 @@ public class Enemy : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.tag == "Bullet")
+        if (collision.gameObject.name=="Bullet")
         {
             Bullet bullet = collision.gameObject.GetComponent<Bullet>();
             isMove = false;
             anim.SetBool("isHit", true);
-            OnHit(bullet.damage);   
+            OnHit(bullet.attackdamage);   
         }
     }
 }

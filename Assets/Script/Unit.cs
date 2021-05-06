@@ -2,31 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Animations;
+using TMPro;
 
 
 public class Unit : MonoBehaviour
 {
-    public enum State
-    {
-        Move = 0,
-        Attack = 1,
-        Hit = 2,
-        Die = 3
-    }
+    [SerializeField] SpriteRenderer unitImg;
 
-    public enum UnitType
-    {
-        Shooting,
-        Fire,
-        Ice,
-        Electric,
-        Normal,
-        Bullet
-    };
-
-
-    private State state = State.Move;
-    public UnitType UT;
+    bool isEnemy;
 
     public Enemy currentTarget = null;
     private Animator anim;
@@ -34,23 +17,30 @@ public class Unit : MonoBehaviour
     public int hp=10;
     public float SearchRange;
     public float AttackSpeed = 0.1f;
+    public int damage;
     public GameObject Bullet = null;
     public Transform BulletStartTrans;
     public bool isMove = true;
+    public UnitDB unitdb;
+
+    public static Unit AttackDamage;
     
-
-
-
-
+    public void SetUp(UnitDB unitdb)
+    {
+        this.unitdb = unitdb;
+        unitImg.sprite = this.unitdb.sprite;
+    }
 
     public void Awake()
     {
         anim = GetComponent<Animator>();
+        AttackDamage = this;
     }
     public void Start()
     {
         StartCoroutine(CheckTarget());
         StartCoroutine(CheckAttack());
+        damage = unitdb.AttackDamage;
     }
 
 
@@ -63,10 +53,6 @@ public class Unit : MonoBehaviour
                 currentTarget = null;
             }
         }
-        if (isMove == true) {
-            anim.SetBool("isAttack",false);
-            Move();
-        }
     }
 
     private void FixedUpdate()
@@ -74,145 +60,38 @@ public class Unit : MonoBehaviour
 
     }
 
-    private void Move()
-    {
-        if (state != State.Move)
-            return;
-        anim.SetBool("isMove", true);
-        transform.Translate(Vector2.right * speed * Time.deltaTime);
-
-    }
-
     private void SearchR()
     {
-        switch (UT)
-        {
-            case UnitType.Normal:
-                SearchRange = 0.5f;
-                break;
-            case UnitType.Shooting:
-                SearchRange = 2f;
-                break;
-            case UnitType.Fire:
-                SearchRange = 0.5f;
-                break;
-            case UnitType.Ice:
-                SearchRange = 0.5f;
-                break;
-            case UnitType.Electric:
-                SearchRange = 0.5f;
-                break;
-        }
-
+        SearchRange = unitdb.AttackRange;
     }
+    private float AttackSpd()
+    {
+        AttackSpeed = unitdb.AttackSpeed;
+        return AttackSpeed;
+    }
+
 
     private IEnumerator CheckTarget()
     {
         while (true)
         {
-            switch (UT)
+            SearchR();
+            AttackSpd();
+            int layerMask = 1 << LayerMask.NameToLayer("Enemy");
+            Collider2D[] objs = Physics2D.OverlapCircleAll(transform.position, SearchRange, layerMask);
+
+            foreach (Collider2D item in objs)
             {
-                case UnitType.Shooting:
-                    {
-                        SearchR();
-                        int layerMask = 1 << LayerMask.NameToLayer("Enemy");
-                        Collider2D[] objs = Physics2D.OverlapCircleAll(transform.position, SearchRange, layerMask);
-
-                        foreach (Collider2D item in objs)
-                        {
-                            Enemy target = item.GetComponent<Enemy>();
-                            if (target != null)
-                            {
-                                currentTarget = target;
-                                Debug.Log("Searched");
-                                break;
-                            }
-                        }
-                        yield return new WaitUntil(CoroutineWait);
-                        yield return null;
-                    }
+                Enemy target = item.GetComponent<Enemy>();
+                if (target != null)
+                {
+                    currentTarget = target;
+                    Debug.Log("Searched");
                     break;
-                case UnitType.Normal:
-                    {
-                        SearchR();
-                        int layerMask = 1 << LayerMask.NameToLayer("Enemy");
-                        Collider2D[] objs = Physics2D.OverlapCircleAll(transform.position, SearchRange, layerMask);
-
-                        foreach (Collider2D item in objs)
-                        {
-                            Enemy target = item.GetComponent<Enemy>();
-                            if (target != null)
-                            {
-                                currentTarget = target;
-                                Debug.Log("Searched");
-                                break;
-                            }
-                        }
-                        yield return new WaitUntil(CoroutineWait);
-                        yield return null;
-                    }
-                    break;
-                case UnitType.Fire:
-                    {
-                        SearchR();
-                        int layerMask = 1 << LayerMask.NameToLayer("Enemy");
-                        Collider2D[] objs = Physics2D.OverlapCircleAll(transform.position, SearchRange, layerMask);
-
-                        foreach (Collider2D item in objs)
-                        {
-                            Enemy target = item.GetComponent<Enemy>();
-                            if (target != null)
-                            {
-                                currentTarget = target;
-                                Debug.Log("Searched");
-                                break;
-                            }
-                        }
-                        yield return new WaitUntil(CoroutineWait);
-                        yield return null;
-                    }
-                    break;
-                case UnitType.Ice:
-                    {
-                        SearchR();
-                        int layerMask = 1 << LayerMask.NameToLayer("Enemy");
-                        Collider2D[] objs = Physics2D.OverlapCircleAll(transform.position, SearchRange, layerMask);
-
-                        foreach (Collider2D item in objs)
-                        {
-                            Enemy target = item.GetComponent<Enemy>();
-                            if (target != null)
-                            {
-                                currentTarget = target;
-                                Debug.Log("Searched");
-                                break;
-                            }
-                        }
-                        yield return new WaitUntil(CoroutineWait);
-                        yield return null;
-                    }
-                    break;
-                case UnitType.Electric:
-                    {
-                        SearchR();
-                        int layerMask = 1 << LayerMask.NameToLayer("Enemy");
-                        Collider2D[] objs = Physics2D.OverlapCircleAll(transform.position, SearchRange, layerMask);
-
-                        foreach (Collider2D item in objs)
-                        {
-                            Enemy target = item.GetComponent<Enemy>();
-                            if (target != null)
-                            {
-                                currentTarget = target;
-                                Debug.Log("Searched");
-                                break;
-                            }
-                        }
-                        yield return new WaitUntil(CoroutineWait);
-                        yield return null;
-                    }
-                    break;
+                }
             }
+            yield return new WaitUntil(CoroutineWait);
+            yield return null;
         }
     }
 
@@ -224,12 +103,13 @@ public class Unit : MonoBehaviour
 
     private IEnumerator CheckAttack()
     {
+        AttackSpd();
         while (true)
         {
             if (currentTarget != null)
             {
                 Attack();
-                yield return new WaitForSeconds(AttackSpeed);
+                yield return new WaitForSeconds(AttackSpd());
             }
             else
             {
@@ -242,27 +122,9 @@ public class Unit : MonoBehaviour
 
     private void Attack()
     {
-        isMove = false;
-        anim.SetBool("isAttack",true);
-        anim.SetBool("isMove", false);
-        switch (UT)
-        {
-            case UnitType.Normal:
-                break;
-            case UnitType.Shooting:
-                GameObject obj = Instantiate(Bullet);
-                obj.transform.position = BulletStartTrans.position;
-                Bullet script = obj.GetComponent<Bullet>();
-                script.SetTarget(currentTarget, 1f);
-                break;
-            case UnitType.Fire:
-                break;
-            case UnitType.Ice:
-                break;
-            case UnitType.Electric:
-                break;
-
-        }
-
+        GameObject obj = Instantiate(Bullet);
+        obj.transform.position = BulletStartTrans.position;
+        Bullet script = obj.GetComponent<Bullet>();
+        script.SetTarget(currentTarget, 1f);
     }
 }

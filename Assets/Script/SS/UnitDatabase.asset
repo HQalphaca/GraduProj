@@ -14,30 +14,40 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   udb:
   - name: Unit1
+    sprite: {fileID: -8841635860366414514, guid: 8fd352c18a7db7c46b4f9ee7895947ae, type: 3}
+    AttackRange: 5
     AttackDamage: 5
     AttackSpeed: 0.3
     CriticalDamage: 50
     CriticalChance: 25
     percent: 20
   - name: Unit2
+    sprite: {fileID: -8841635860366414514, guid: 8fd352c18a7db7c46b4f9ee7895947ae, type: 3}
+    AttackRange: 5
     AttackDamage: 6
     AttackSpeed: 0.4
     CriticalDamage: 60
     CriticalChance: 25
     percent: 20
   - name: Unit3
+    sprite: {fileID: -8841635860366414514, guid: 8fd352c18a7db7c46b4f9ee7895947ae, type: 3}
+    AttackRange: 5
     AttackDamage: 8
     AttackSpeed: 1
     CriticalDamage: 55
     CriticalChance: 25
     percent: 20
-  - name: Unit3
+  - name: Unit4
+    sprite: {fileID: -8841635860366414514, guid: 8fd352c18a7db7c46b4f9ee7895947ae, type: 3}
+    AttackRange: 5
     AttackDamage: 8
     AttackSpeed: 1
     CriticalDamage: 55
     CriticalChance: 25
     percent: 20
-  - name: Unit3
+  - name: Unit5
+    sprite: {fileID: -8841635860366414514, guid: 8fd352c18a7db7c46b4f9ee7895947ae, type: 3}
+    AttackRange: 5
     AttackDamage: 8
     AttackSpeed: 1
     CriticalDamage: 55
