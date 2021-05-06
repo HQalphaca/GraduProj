@@ -1,22 +1,19 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class UnitManager : MonoBehaviour
 {
     public static UnitManager Inst { get; private set; }
     private void Awake() => Inst = this;
 
-    List<GameObject> Spawned = new List<GameObject>();
+    public List<Vector3> PlaceList = new List<Vector3>();
 
     [SerializeField] UnitDatabase UDB;
     [SerializeField] GameObject UnitPrefab;
-
-    [Range(0, 16)]
-    public int x;
-    [Range(0, 16)]
-    public int y;
-
+    public int counting = 0;
+    public int max = 15;
     List<UnitDB> statBuffer;
     public UnitDB SummonUnit()
     {
@@ -55,7 +52,12 @@ public class UnitManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            AddUnit(true);
+            if (max == 0)
+            {
+                AddUnit(false);
+            }
+            else
+                AddUnit(true);
         }
     }
 
@@ -63,13 +65,15 @@ public class UnitManager : MonoBehaviour
 
     void AddUnit(bool isMine)
     {
-        int RXL = Random.Range(-2, 3);
-        int RYL = Random.Range(-1, 2);
-        var unitObject = Instantiate(UnitPrefab, new Vector3(RXL,RYL,0f), Quaternion.identity);
+        int placeListNum = Random.Range(0, max);
+        var unitObject = Instantiate(UnitPrefab, PlaceList[placeListNum], Quaternion.identity);
+        PlaceList.RemoveAt(placeListNum);
         var unit = unitObject.GetComponent<Unit>();
         unit.SetUp(SummonUnit());
-        Spawned.Add(unitObject);
+        Debug.Log("max= "+max);
+        max -= 1;
     }
 
-    
+
+
 }
