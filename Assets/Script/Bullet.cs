@@ -5,15 +5,16 @@ using System;
 
 public class Bullet : MonoBehaviour
 {
+    // 변수 설정.
     public int attackdamage;
     private Enemy _target;
     private float _time;
     private float _progress = 0f;
     private Vector2 _startPos;
-
     public static Bullet damage;
-
-
+    [SerializeField]
+    UnitDatabase unitDatabase;
+    public Unit unit;
     public void Awake()
     {
         
@@ -21,9 +22,14 @@ public class Bullet : MonoBehaviour
 
     public void Start()
     {
-        attackdamage = Unit.AttackDamage.damage;
+
     }
 
+    public void FixedUpdate()
+    {
+    }
+
+    // 유닛이 발사한 타겟 설정.
     public void SetTarget(Enemy target,float time)
     {
         _target = target;
@@ -33,6 +39,8 @@ public class Bullet : MonoBehaviour
         StartCoroutine(Move());
     }
     
+
+    // 설정된 타겟으로 이동.
     public IEnumerator Move()
     {
         Vector2 targetPos = _target.transform.position;

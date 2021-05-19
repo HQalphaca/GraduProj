@@ -5,6 +5,13 @@ TagManager:
   serializedVersion: 2
   tags:
   - Bullet
+  - Unit
+  - Unit1
+  - Unit2
+  - Unit3
+  - Unit4
+  - Unit5
+  - tower
   layers:
   - Default
   - TransparentFX
